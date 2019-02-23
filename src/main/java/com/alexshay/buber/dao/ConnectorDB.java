@@ -1,4 +1,5 @@
 package com.alexshay.buber.dao;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,12 +9,13 @@ public class ConnectorDB {
     }
 
     public static Connection getConnection() throws SQLException {
+        DriverManager.registerDriver(new com.mysql.jdbc.Driver ());
         ResourceBundle resource = ResourceBundle.getBundle("db");
         String url = resource.getString("url")+ "?" +
                 "useUnicode=" + resource.getString("useUnicode") + "&" +
                 "characterEncoding=" + resource.getString("characterEncoding") + "&" +
                 "autoReconnect=" + resource.getString("autoReconnect") + "&" +
-                "useSSL=" + resource.getString("useSSL") ;
+                "useSSL=" + resource.getString("useSSL");
         String user = resource.getString("user");
         String pass = resource.getString("password");
         return DriverManager.getConnection(url, user, pass);

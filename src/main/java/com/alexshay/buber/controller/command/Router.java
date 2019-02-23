@@ -1,5 +1,7 @@
 package com.alexshay.buber.controller.command;
 
+import java.util.Arrays;
+
 /**
  * Provide route to jsp page
  */
@@ -11,5 +13,16 @@ public class Router {
         FORWARD, REDIRECT
     }
 
-    //Provide your code here
+    public Router(String route, Type type) {
+        this.route = route;
+        this.type = type;
+    }
+
+    public String getRoute() {
+        return route;
+    }
+
+    public Type getType() {
+        return type;
+    }
 }

@@ -1,8 +1,5 @@
 package com.alexshay.buber.controller.filter;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
@@ -15,12 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(/* Provide your code here **/)
+@WebFilter(urlPatterns = { "/*" })
 public class AuthenticationFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
@@ -28,9 +24,10 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
-        //Provide your code here
 
-        //Don't forget to invoke this method
+
+
+
         chain.doFilter(request, response);
     }
 

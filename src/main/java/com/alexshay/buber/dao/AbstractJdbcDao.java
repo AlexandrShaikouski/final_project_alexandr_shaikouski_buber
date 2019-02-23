@@ -35,20 +35,15 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @AutoConnection
     public T getByPK(PK key) throws DaoException {
         String sql = getSelectQuery() + " WHERE id=" + key;
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
-            ResultSet resultSet = statement.executeQuery();
-            return parseResultSet(resultSet).get(0);
-        } catch (SQLException e) {
-            LOGGER.error(e);
-            throw new DaoException("Not getting info by PK from DB", e);
-        }
+        return getParameterT(sql);
     }
 
     @Override
     @AutoConnection
     public List<T> getAll() throws DaoException {
 
-        try (PreparedStatement statement = connection.prepareStatement(getSelectQuery(),Statement.RETURN_GENERATED_KEYS)){
+        try (Statement statement = connection.createStatement()){
+            statement.execute(getSelectQuery());
             ResultSet resultSet = statement.getResultSet();
             return parseResultSet(resultSet);
         } catch (SQLException e) {
@@ -100,6 +95,24 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new PersistException("Failed to delete", e);
+        }
+    }
+
+    @Override
+    @AutoConnection
+    public T getByParameter(String parameter, String value) throws DaoException {
+        String sql = getSelectQuery() + " WHERE " + parameter + "=\'" + value +"\'";
+        return getParameterT(sql);
+    }
+
+    private T getParameterT(String sql) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            ResultSet resultSet = statement.executeQuery();
+            List<T> parseRes = parseResultSet(resultSet);
+            return parseRes.isEmpty()?null:parseRes.get(0);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new DaoException("Not getting info by PK from DB", e);
         }
     }
 }

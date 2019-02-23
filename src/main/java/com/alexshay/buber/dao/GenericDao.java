@@ -48,4 +48,11 @@ public interface GenericDao<T extends Identified<PK>, PK extends Serializable> {
      * @throws DaoException should be clarify
      */
     List<T> getAll() throws DaoException;
+    /**
+     * Get identified entity by PK
+     * @return identified entity
+     * @throws DaoException should be clarify
+     */
+    T getByParameter(String parametr, String value) throws DaoException;
+
 }

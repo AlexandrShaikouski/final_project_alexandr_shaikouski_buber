@@ -1,5 +1,12 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<head>
+    <title>Buber</title>
+</head>
 <body>
-<h2>Hello World!</h2>
+
+<a href="${pageContext.servletContext.contextPath}/jsp/admin/admin.jsp">Page for admin</a>
+
 </body>
 </html>

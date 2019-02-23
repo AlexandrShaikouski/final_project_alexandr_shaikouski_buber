@@ -14,7 +14,7 @@ public class CommandExample implements Command {
     public ResponseContent execute(HttpServletRequest request) {
         // Provide your code here
 
-        UserService userService = ServiceFactory.getInstance().getUserService();
+        UserService userService = ServiceFactory.getInstance().getUserService("user");
 
         // Provide your code here
 
