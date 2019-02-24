@@ -15,6 +15,7 @@ public abstract class UserService<T extends Identified<Integer>> {
     abstract public T signUp(HttpServletRequest request) throws ServiceException;
     abstract public List<T> getAll() throws ServiceException;
     abstract public void deleteUser(int id) throws ServiceException;
+    abstract public T signIn(HttpServletRequest request) throws ServiceException;
 
 
     public static String encryptPassword(String password) throws NoSuchAlgorithmException {

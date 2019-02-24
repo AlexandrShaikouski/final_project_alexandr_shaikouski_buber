@@ -16,8 +16,6 @@
 <script src="${pageContext.servletContext.contextPath}/js/off-canvas.js"></script>
 <script src="${pageContext.servletContext.contextPath}/js/dashboard.js"></script>
 <script src="${pageContext.servletContext.contextPath}/js/jquery-3.3.1.min.js"></script>
-
-
-<script src="../../js/script.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/script.js"></script>
 </body>
 </html>

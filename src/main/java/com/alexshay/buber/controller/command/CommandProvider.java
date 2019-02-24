@@ -15,11 +15,11 @@ public class CommandProvider {
     }
 
     private CommandProvider() {
-        commandMap.put("CommandExample", new CommandExample());
         commandMap.put("list_users", new CommandGetUserList());
         commandMap.put("list_drivers", new CommandGetDriverList());
         commandMap.put("create_user", new CommandCreateUser());
         commandMap.put("delete_user", new CommandDeleteUser());
+        commandMap.put("sign_in", new CommandSignInUser());
     }
 
     /**

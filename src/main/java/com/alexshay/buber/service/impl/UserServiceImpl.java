@@ -6,6 +6,8 @@ import com.alexshay.buber.dao.FactoryProducer;
 import com.alexshay.buber.dao.GenericDao;
 import com.alexshay.buber.dao.exception.DaoException;
 import com.alexshay.buber.dao.exception.PersistException;
+import com.alexshay.buber.domain.Driver;
+import com.alexshay.buber.domain.DriverStatus;
 import com.alexshay.buber.domain.Role;
 import com.alexshay.buber.domain.User;
 import com.alexshay.buber.service.UserService;
@@ -76,6 +78,27 @@ public class UserServiceImpl extends UserService<User> {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (PersistException e) {
             throw new ServiceException("Failed to save delete. ", e);
+        }
+    }
+
+    @Override
+    public User signIn(HttpServletRequest request) throws ServiceException {
+        try {
+            DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+            GenericDao<User, Integer> userDao = daoFactory.getDao(User.class);
+            String login = request.getParameter("login");
+            String password = encryptPassword(request.getParameter("passwordUser"));
+            User user = userDao.getByParameter("login", login);
+            if (user != null){
+                if(user.getPassword().equals(password)){
+                    return user;
+                }
+            }
+            return user;
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
         }
     }
 

@@ -46,7 +46,7 @@ public class DriverServiceImpl extends UserService<Driver> {
         } catch (PersistException e) {
             throw new ServiceException("Failed to save driver. ", e);
         } catch (NoSuchAlgorithmException e) {
-            throw new ServiceException("Failed to use Algorithm for password",e);
+            throw new ServiceException("Failed to use Algorithm for password", e);
         }
     }
 
@@ -64,7 +64,7 @@ public class DriverServiceImpl extends UserService<Driver> {
     }
 
     @Override
-    public void deleteUser(int id) throws ServiceException{
+    public void deleteUser(int id) throws ServiceException {
         DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
         try {
             GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
@@ -74,6 +74,31 @@ public class DriverServiceImpl extends UserService<Driver> {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (PersistException e) {
             throw new ServiceException("Failed to save delete. ", e);
+        }
+    }
+
+    @Override
+    public Driver signIn(HttpServletRequest request) throws ServiceException {
+        try {
+            DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+            GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
+            String login = request.getParameter("login");
+            String password = encryptPassword(request.getParameter("passwordUser"));
+            Driver driver = driverDao.getByParameter("login", login);
+            if (driver != null){
+                if(driver.getPassword().equals(password)){
+                    driver.setStatus(DriverStatus.ONLINE);
+                    driverDao.update(driver);
+                    return driver;
+                }
+            }
+            return driver;
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (PersistException e) {
+            throw new ServiceException("Failed to save delete. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
         }
     }
 
