@@ -20,7 +20,6 @@ public class CommandSignInUser implements Command {
         String urlAdmin = request.getRequestURL().toString().replace(servletPath,"") +  "/jsp/admin/admin.jsp";
         String urlClient = request.getRequestURL().toString().replace(servletPath,"") +  "/jsp/client/client.jsp";
         String urlDriver = request.getRequestURL().toString().replace(servletPath,"") +  "/jsp/driver/driver.jsp";
-
         try {
             User user = (User)userService.signIn(request);
             if(user != null){
@@ -38,7 +37,7 @@ public class CommandSignInUser implements Command {
                     request.setAttribute("driver", driver);
                     responseContent.setRouter(new Router(urlDriver,Router.Type.REDIRECT));
                 }else {
-                    request.setAttribute("found", "not");
+                    request.setAttribute("error_message", "Not such data!");
                     responseContent.setRouter(new Router("/",Router.Type.FORWARD));
                 }
             }

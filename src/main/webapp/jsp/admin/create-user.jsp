@@ -13,7 +13,7 @@
                     <input type="hidden" name="flag" value="admin">
                     <div class="form-group">
                         <label for="login">Login</label>
-                        <input name="login" type="text" class="form-control" id="login"  placeholder="Login">
+                        <input name="login" title="Login must consist of Latin characters and numbers" type="text" class="form-control" id="login"  placeholder="Login">
                     </div>
                     <div class="form-group">
                         <label for="passwordUser">Password</label>
@@ -54,9 +54,7 @@
                                 Driver
                                 <i class="input-helper"></i></label>
                         </div>
-                        <c:if test="${error_message != 'correct'}">
-                            <h2 class="display-3">${error_message}</h2>
-                        </c:if>
+
                     </div>
                     <button name="button_register" type="button" onclick="valid(document.getElementById('form'))" class="btn btn-gradient-primary mr-2">Submit</button>
                     <a class="btn btn-light" href="${pageContext.servletContext.contextPath}/jsp/admin/admin.jsp">Cancel</a>

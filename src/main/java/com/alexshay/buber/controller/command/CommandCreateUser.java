@@ -28,12 +28,13 @@ public class CommandCreateUser implements Command {
         request.setAttribute("role",role);
         try {
             String validate = validator.validate(request);
-            if(validate.equals("")) {
+            if(validate == null) {
                 switch (role) {
                     case "client":
                         User client = (User) userService.signUp(request);
                         request.setAttribute("user", client);
                         if (flag.equals("admin")) {
+                            request.setAttribute("message_user", "Creation was successful");
                             responseContent.setRouter(new Router(urlAdmin, Router.Type.REDIRECT));
                         } else {
                             responseContent.setRouter(new Router(urlClient, Router.Type.REDIRECT));
@@ -50,10 +51,14 @@ public class CommandCreateUser implements Command {
                         responseContent.setRouter(new Router(urlAdmin, Router.Type.REDIRECT));
                         break;
                 }
-                request.setAttribute("error_message", validate);
             }else {
-                request.setAttribute("error_message", validate);
-                responseContent.setRouter(new Router("/jsp/admin/create-user.jsp", Router.Type.FORWARD));
+                request.setAttribute("message_user", validate);
+                if(flag.equals("admin")){
+                    responseContent.setRouter(new Router("/jsp/admin/create-user.jsp", Router.Type.FORWARD));
+                }else{
+                    responseContent.setRouter(new Router("/pages/register.jsp", Router.Type.FORWARD));
+                }
+
 
             }
         } catch (ServiceException e) {

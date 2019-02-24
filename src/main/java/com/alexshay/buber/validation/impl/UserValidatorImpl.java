@@ -66,6 +66,6 @@ public class UserValidatorImpl implements Validator {
             throw new ServiceException("Failed to use Algorithm for password",e);
         }
 
-        return validString.equals("")?validString:validString + " already exist!";
+        return validString.equals("")?null:validString + " already exist!";
     }
 }
