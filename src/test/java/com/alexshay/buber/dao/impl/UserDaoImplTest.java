@@ -34,12 +34,12 @@ public class UserDaoImplTest {
     public void init() throws DaoException {
         user = new User();
         user.setId(1);
-        user.setLogin("Alex");
+        user.setLogin("A");
         user.setPassword("871FF76E24362EFA16E7F39D65EE380ADE9129D969E895CE34E5DB54252604FB");
         user.setFirstName("Alexandr");
         user.setLastName("Shaikouski");
-        user.setEmail("sash_shay@mail.ru");
-        user.setPhone("+375256182421");
+        user.setEmail("sash_shay@mail.ruff");
+        user.setPhone("+373256182421");
         user.setLocation("53.8853376,27.5546112,12");
         user.setRegistrationTime(new Date());
         user.setRole(Role.ADMIN);
@@ -56,10 +56,10 @@ public class UserDaoImplTest {
             user1 = genericDao.persist(user);
             User user2 = genericDao.getByPK(user1.getId());
             assertEquals(user1, user2);
-            user.setLogin("Max");
+            user.setLogin("B");
             genericDao.update(user1);
             user2 = genericDao.getByPK(user2.getId());
-            assertEquals("Max", user2.getLogin());
+            assertEquals("B", user2.getLogin());
         }finally {
             if(user1 != null) {
                 genericDao.delete(user1);
