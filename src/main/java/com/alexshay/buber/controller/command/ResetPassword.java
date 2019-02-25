@@ -77,7 +77,7 @@ public class ResetPassword {
         String servletPath = request.getServletPath();
         String urlMainPage = request.getRequestURL().toString().replace(servletPath,"");
         String role = request.getParameter("role");
-        String reset = request.getParameter("reset");
+        String email = request.getParameter("email");
 
         if(role.equals("user")){
             UserService userService = ServiceFactory.getInstance().getUserService("user");
@@ -94,6 +94,8 @@ public class ResetPassword {
         }
         responseContent.setRouter(new Router("/pages/reset-password.jsp", Router.Type.FORWARD));
         request.setAttribute("reset", "reset_password");
+        request.setAttribute("role", role);
+        request.setAttribute("email", email);
         request.setAttribute("message", "Password exist");
         return responseContent;
     }
