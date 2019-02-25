@@ -54,6 +54,7 @@
                               id="form_register">
 
                             <input type="hidden" name="command" value="create_user">
+                            <input type="hidden" name="role" value="client">
                             <input type="hidden" name="flag" style="background: none" value="user">
                             <div class="form-group">
                                 <label for="login">Login</label>
@@ -82,14 +83,6 @@
                                 <label for="first_name">First name</label>
                                 <input name="first_name" type="text" class="form-control" id="first_name"
                                        placeholder="First name">
-                            </div>
-                            <div class="mb-4">
-                                <div class="form-check">
-                                    <label class="form-check-label text-muted">
-                                        <input name="check_agree" value="agree" type="checkbox" class="form-check-input">
-                                        I agree to all Terms &amp; Conditions
-                                        <i class="input-helper"></i></label>
-                                </div>
                             </div>
                             <div class="mt-3">
                                 <button name="button_register" type="button"

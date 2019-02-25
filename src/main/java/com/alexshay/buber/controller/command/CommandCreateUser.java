@@ -34,7 +34,6 @@ public class CommandCreateUser implements Command {
                         User client = (User) userService.signUp(request);
                         request.setAttribute("user", client);
                         if (flag.equals("admin")) {
-                            request.setAttribute("message_user", "Creation was successful");
                             responseContent.setRouter(new Router(urlAdmin, Router.Type.REDIRECT));
                         } else {
                             responseContent.setRouter(new Router(urlClient, Router.Type.REDIRECT));
@@ -42,12 +41,10 @@ public class CommandCreateUser implements Command {
                         break;
                     case "admin":
                         User admin = (User) userService.signUp(request);
-                        request.setAttribute("user", admin);
                         responseContent.setRouter(new Router(urlAdmin, Router.Type.REDIRECT));
                         break;
                     case "driver":
                         Driver driver = (Driver) driverService.signUp(request);
-                        request.setAttribute("user", driver);
                         responseContent.setRouter(new Router(urlAdmin, Router.Type.REDIRECT));
                         break;
                 }
