@@ -86,14 +86,11 @@
                             <div class="mb-4">
                                 <div class="form-check">
                                     <label class="form-check-label text-muted">
-                                        <input type="checkbox" class="form-check-input">
+                                        <input name="check_agree" value="agree" type="checkbox" class="form-check-input">
                                         I agree to all Terms &amp; Conditions
                                         <i class="input-helper"></i></label>
                                 </div>
                             </div>
-                            <c:if test="${error_message != 'correct'}">
-                            <h2 class="display-3">${error_message}</h2>
-                            </c:if>
                             <div class="mt-3">
                                 <button name="button_register" type="button"
                                         onclick="valid(document.getElementById('form_register'))"
@@ -105,9 +102,9 @@
                                 Already have an account? <a href="${pageContext.servletContext.contextPath}"
                                                             class="text-primary">Login</a>
                             </div>
+                        </form>
                     </div>
 
-                    </form>
                 </div>
             </div>
         </div>

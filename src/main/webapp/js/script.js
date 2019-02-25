@@ -61,3 +61,30 @@ function valid(form) {
     }
 
 }
+function validrepassword(form) {
+    var password_regex = /^[a-zA-Z0-9!@#$%^&*]{6,45}$/;
+    var password = form.passwordUser.value;
+    var repassword = form.repasswordUser.value;
+    var counter = 0;
+
+    if(password != repassword){
+        $('#repasswordUser').addClass('alert-danger');
+        counter = counter + 1;
+    }else{
+        $('#repasswordUser').removeClass('alert-danger');
+    }
+    if(!password_regex.test(password)){
+        $('#passwordUser').addClass('alert-danger');
+        $('#repasswordUser').addClass('alert-danger');
+        counter = counter + 1;
+    }else{
+        $('#passwordUser').removeClass('alert-danger');
+    }
+
+    if(counter > 0){
+        return false;
+    }else {
+        $('button[name="button_reset_password"]').attr("type","submit");
+        $('button[name="button_reset_password"]').trigger('submit');
+    }
+}

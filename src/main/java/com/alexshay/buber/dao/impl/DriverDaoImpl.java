@@ -20,13 +20,13 @@ public class DriverDaoImpl extends AbstractJdbcDao<Driver, Integer> implements G
     private static final String UPDATE_QUERY = "UPDATE driver_account " +
             "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
             "email = ?, phone = ?, registration_date = ?, status = ?,  location = ?, " +
-            "status_ban = ? " +
+            "status_ban = ?, repassword_key = ? " +
             "WHERE id = ?";
     private static final String SELECT_QUERY = "SELECT * FROM driver_account";
     private static final String CREATE_QUERY = "INSERT INTO driver_account " +
             "(login, password, first_name, last_name, email, phone, registration_date, status, location, " +
-            "status_ban) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "status_ban, repassword_key) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     @Override
     protected List<Driver> parseResultSet(ResultSet rs) throws SQLException {
@@ -51,6 +51,7 @@ public class DriverDaoImpl extends AbstractJdbcDao<Driver, Integer> implements G
                 driver.setStatusBan(null);
             }
             driver.setStatus(DriverStatus.fromValue(rs.getString("status")));
+            driver.setRepasswordKey(rs.getString("repassword_key"));
 
             driverList.add(driver);
         }
@@ -76,13 +77,13 @@ public class DriverDaoImpl extends AbstractJdbcDao<Driver, Integer> implements G
         }else{
             statement.setLong(++counter, 0);
         }
-
+        statement.setString(++counter, object.getRepasswordKey());
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Driver object) throws SQLException {
         prepareStatementForInsert(statement,object);
-        statement.setInt(11,object.getId());
+        statement.setInt(12,object.getId());
     }
 
     @Override

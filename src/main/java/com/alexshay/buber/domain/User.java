@@ -12,6 +12,7 @@ public class User implements Identified<Integer> {
     private int id;
     private String login;
     private String password;
+    private String repasswordKey;
     private String firstName;
     private String lastName;
     private String email;
@@ -29,6 +30,14 @@ public class User implements Identified<Integer> {
     @Override
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getRepasswordKey() {
+        return repasswordKey;
+    }
+
+    public void setRepasswordKey(String repasswordKey) {
+        this.repasswordKey = repasswordKey;
     }
 
     public String getLogin() {
@@ -125,9 +134,9 @@ public class User implements Identified<Integer> {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id &&
-                role == user.role &&
                 Objects.equals(login, user.login) &&
                 Objects.equals(password, user.password) &&
+                Objects.equals(repasswordKey, user.repasswordKey) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(email, user.email) &&
@@ -135,12 +144,13 @@ public class User implements Identified<Integer> {
                 Objects.equals(location, user.location) &&
                 Objects.equals(registrationTime, user.registrationTime) &&
                 Objects.equals(statusBan, user.statusBan) &&
+                role == user.role &&
                 Objects.equals(bonuses, user.bonuses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, firstName, lastName, email, phone, location, registrationTime, statusBan, role, bonuses);
+        return Objects.hash(id, login, password, repasswordKey, firstName, lastName, email, phone, location, registrationTime, statusBan, role, bonuses);
     }
 
     @Override
@@ -149,6 +159,7 @@ public class User implements Identified<Integer> {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", repasswordKey='" + repasswordKey + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

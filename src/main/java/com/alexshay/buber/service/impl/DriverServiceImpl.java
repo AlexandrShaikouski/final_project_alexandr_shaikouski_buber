@@ -11,6 +11,8 @@ import com.alexshay.buber.domain.DriverStatus;
 import com.alexshay.buber.domain.User;
 import com.alexshay.buber.service.UserService;
 import com.alexshay.buber.service.exception.ServiceException;
+import com.alexshay.buber.validation.Validator;
+import com.alexshay.buber.validation.impl.PasswordValidatorImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
@@ -37,6 +39,7 @@ public class DriverServiceImpl extends UserService<Driver> {
 
             driver.setRegistrationTime(new Date());
             driver.setStatus(DriverStatus.OFF_LINE);
+
             GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
             return driverDao.persist(driver);
 
@@ -92,7 +95,7 @@ public class DriverServiceImpl extends UserService<Driver> {
                     return driver;
                 }
             }
-            return driver;
+            return null;
         } catch (DaoException e) {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (PersistException e) {
@@ -100,6 +103,71 @@ public class DriverServiceImpl extends UserService<Driver> {
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Failed to use Algorithm for password", e);
         }
+    }
+
+    @Override
+    public String getResetPasswordKey(String email) throws ServiceException {
+        String repassword = generateRandomString();
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        try {
+            GenericDao<Driver, Integer> userDao = daoFactory.getDao(Driver.class);
+            Driver driver = userDao.getByParameter("email", email);
+            driver.setRepasswordKey(encryptPassword(repassword));
+            userDao.update(driver);
+
+        } catch (DaoException | PersistException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
+        }
+        return repassword;
+    }
+
+    @Override
+    public boolean checkRepasswordKey(HttpServletRequest request) throws ServiceException {
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        String key = request.getParameter("key");
+        String email = request.getParameter("email");
+        String role = request.getParameter("role");
+        try {
+            GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
+            Driver user = driverDao.getByParameter("email", email);
+            if(user.getRepasswordKey().equals(encryptPassword(key))){
+                user.setRepasswordKey(null);
+                driverDao.update(user);
+                return true;
+            }
+
+        } catch (DaoException | PersistException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean resetPassword(HttpServletRequest request) throws ServiceException {
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        Validator validator = new PasswordValidatorImpl();
+        String email = request.getParameter("email");
+        String password = request.getParameter("passwordUser");
+        String valid = validator.validate(request);
+
+        try {
+            GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
+            if (valid == "") {
+                Driver driver = driverDao.getByParameter("email",email);
+                driver.setPassword(encryptPassword(password));
+                driverDao.update(driver);
+                return true;
+            }
+        } catch (DaoException | PersistException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
+        }
+        return false;
     }
 
 }

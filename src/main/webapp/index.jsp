@@ -47,7 +47,7 @@
                                         Keep me signed in
                                         <i class="input-helper"></i></label>
                                 </div>
-                                <a href="#" class="auth-link text-black">Forgot password?</a>
+                                <a href="${pageContext.servletContext.contextPath}/pages/reset-password.jsp" class="auth-link text-black">Forgot password?</a>
                             </div>
                             <div class="text-center mt-4 font-weight-light">
                                 Don't have an account? <a href="${pageContext.servletContext.contextPath}/pages/register.jsp" class="text-primary">Create</a>

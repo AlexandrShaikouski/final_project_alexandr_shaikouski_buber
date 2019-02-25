@@ -7,11 +7,12 @@ import com.alexshay.buber.dao.GenericDao;
 import com.alexshay.buber.dao.exception.DaoException;
 import com.alexshay.buber.dao.exception.PersistException;
 import com.alexshay.buber.domain.Driver;
-import com.alexshay.buber.domain.DriverStatus;
 import com.alexshay.buber.domain.Role;
 import com.alexshay.buber.domain.User;
 import com.alexshay.buber.service.UserService;
 import com.alexshay.buber.service.exception.ServiceException;
+import com.alexshay.buber.validation.Validator;
+import com.alexshay.buber.validation.impl.PasswordValidatorImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
@@ -37,7 +38,7 @@ public class UserServiceImpl extends UserService<User> {
             user.setEmail(email);
             user.setPhone(phone);
             user.setFirstName(firstName);
-            user.setRole(role.equals("admin")?Role.ADMIN:Role.USER);
+            user.setRole(role.equals("admin") ? Role.ADMIN : Role.USER);
             user.setPassword(encryptPassword(password));
             user.setRegistrationTime(new Date());
 
@@ -50,7 +51,7 @@ public class UserServiceImpl extends UserService<User> {
         } catch (PersistException e) {
             throw new ServiceException("Failed to save user. ", e);
         } catch (NoSuchAlgorithmException e) {
-            throw new ServiceException("Failed to use Algorithm for password",e);
+            throw new ServiceException("Failed to use Algorithm for password", e);
         }
     }
 
@@ -68,7 +69,7 @@ public class UserServiceImpl extends UserService<User> {
     }
 
     @Override
-    public void deleteUser(int id)  throws ServiceException{
+    public void deleteUser(int id) throws ServiceException {
         DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
         try {
             GenericDao<User, Integer> userDao = daoFactory.getDao(User.class);
@@ -77,7 +78,7 @@ public class UserServiceImpl extends UserService<User> {
         } catch (DaoException e) {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (PersistException e) {
-            throw new ServiceException("Failed to save delete. ", e);
+            throw new ServiceException("Failed to delete. ", e);
         }
     }
 
@@ -89,17 +90,80 @@ public class UserServiceImpl extends UserService<User> {
             String login = request.getParameter("login");
             String password = encryptPassword(request.getParameter("passwordUser"));
             User user = userDao.getByParameter("login", login);
-            if (user != null){
-                if(user.getPassword().equals(password)){
+            if (user != null) {
+                if (user.getPassword().equals(password)) {
                     return user;
                 }
             }
-            return user;
+            return null;
         } catch (DaoException e) {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Failed to use Algorithm for password", e);
         }
+    }
+
+    @Override
+    public String getResetPasswordKey(String email) throws ServiceException {
+        String repassword = generateRandomString();
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        try {
+            GenericDao<User, Integer> userDao = daoFactory.getDao(User.class);
+            User user = userDao.getByParameter("email", email);
+            user.setRepasswordKey(encryptPassword(repassword));
+            userDao.update(user);
+        } catch (DaoException | PersistException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
+        }
+        return repassword;
+    }
+
+    @Override
+    public boolean checkRepasswordKey(HttpServletRequest request) throws ServiceException {
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        String key = request.getParameter("key");
+        String email = request.getParameter("email");
+        String role = request.getParameter("role");
+        try {
+            GenericDao<User, Integer> userDao = daoFactory.getDao(User.class);
+            User user = userDao.getByParameter("email", email);
+            if (user.getRepasswordKey().equals(encryptPassword(key))) {
+                user.setRepasswordKey(null);
+                userDao.update(user);
+                return true;
+            }
+
+        } catch (DaoException | PersistException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean resetPassword(HttpServletRequest request) throws ServiceException {
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        Validator validator = new PasswordValidatorImpl();
+        String email = request.getParameter("email");
+        String password = request.getParameter("passwordUser");
+        String valid = validator.validate(request);
+        try {
+            GenericDao<User, Integer> userDao = daoFactory.getDao(User.class);
+            if (valid == "") {
+                User user = userDao.getByParameter("email",email);
+                user.setPassword(encryptPassword(password));
+                userDao.update(user);
+                return true;
+            }
+        } catch (DaoException | PersistException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Failed to use Algorithm for password", e);
+        }
+        return false;
     }
 
 

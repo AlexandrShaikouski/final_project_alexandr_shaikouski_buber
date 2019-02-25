@@ -20,13 +20,13 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements Gener
     private static final String UPDATE_QUERY = "UPDATE user_account " +
             "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
             "email = ?, phone = ?, registration_date = ?, location = ?, " +
-            "status_ban = ?, role_id = ? " +
+            "status_ban = ?, role_id = ?, repassword_key = ? " +
             "WHERE id = ?";
     private static final String SELECT_QUERY = "SELECT * FROM user_account";
     private static final String CREATE_QUERY = "INSERT INTO user_account " +
-            "(login, password, first_name, last_name, email, phone, registration_date, location, status_ban," +
-            "role_id) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "(login, password, first_name, last_name, email, phone, registration_date, location, status_ban, " +
+            "role_id, repassword_key) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     @Override
     protected List<User> parseResultSet(ResultSet rs) throws SQLException {
@@ -51,7 +51,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements Gener
                 user.setStatusBan(null);
             }
             user.setRole(Role.fromValue(""+rs.getInt("role_id")));
-
+            user.setRepasswordKey(rs.getString("repassword_key"));
             userList.add(user);
         }
 
@@ -76,12 +76,13 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements Gener
             statement.setLong(++counter, 0);
         }
         statement.setInt(++counter, Integer.parseInt(object.getRole().value()));
+        statement.setString(++counter, object.getRepasswordKey());
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, User object) throws SQLException {
         prepareStatementForInsert(statement,object);
-        statement.setInt(11, object.getId());
+        statement.setInt(12, object.getId());
     }
 
     @Override

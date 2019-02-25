@@ -6,8 +6,6 @@ import com.alexshay.buber.dao.exception.ConnectionPoolException;
 import com.alexshay.buber.dao.exception.DaoException;
 import com.alexshay.buber.dao.exception.PersistException;
 import com.alexshay.buber.domain.Bonus;
-import com.alexshay.buber.domain.OrderStatus;
-import com.alexshay.buber.domain.TripOrder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Deque;
 import java.util.ResourceBundle;
 

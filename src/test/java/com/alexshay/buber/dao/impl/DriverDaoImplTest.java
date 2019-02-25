@@ -22,24 +22,23 @@ public class DriverDaoImplTest {
     private static final String UPDATE_QUERY = "UPDATE driver_account " +
             "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
             "email = ?, phone = ?, registration_date = ?, status = ?,  location = ?, " +
-            "status_ban = ? " +
+            "status_ban = ?, repassword_key = ? " +
             "WHERE id = ?";
     private static final String SELECT_QUERY = "SELECT * FROM driver_account";
     private static final String CREATE_QUERY = "INSERT INTO driver_account " +
             "(login, password, first_name, last_name, email, phone, registration_date, status, location, " +
-            "status_ban) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "status_ban, repassword_key) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     @Before
     public void init() throws DaoException {
         driver = new Driver();
-        driver.setId(1);
-        driver.setLogin("Alex");
+        driver.setLogin("B");
         driver.setPassword("871FF76E24362EFA16E7F39D65EE380ADE9129D969E895CE34E5DB54252604FB");
-        driver.setFirstName("Alexandr");
+        driver.setFirstName("B");
         driver.setLastName("Shaikouski");
-        driver.setEmail("sash_shay@mail.ru");
-        driver.setPhone("+375256182421");
+        driver.setEmail("sash_shay@mailddd.rudd");
+        driver.setPhone("+375456182421");
         driver.setLocation("53.8853376,27.5546112,12");
         driver.setRegistrationTime(new Date());
         driver.setStatus(DriverStatus.ONLINE);
@@ -55,10 +54,10 @@ public class DriverDaoImplTest {
             driver1 = genericDao.persist(driver);
             driver = genericDao.getByPK(driver1.getId());
             assertEquals(driver1, driver);
-            driver.setLogin("Max");
+            driver.setLogin("T");
             genericDao.update(driver);
             driver = genericDao.getByPK(driver.getId());
-            assertEquals("Max", driver.getLogin());
+            assertEquals("T", driver.getLogin());
         } finally {
             if (driver1 != null) {
                 genericDao.delete(driver1);

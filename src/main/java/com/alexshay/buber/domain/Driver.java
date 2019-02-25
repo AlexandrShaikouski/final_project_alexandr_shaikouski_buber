@@ -11,6 +11,7 @@ public class Driver implements Identified<Integer> {
     private int id;
     private String login;
     private String password;
+    private String repasswordKey;
     private String firstName;
     private String lastName;
     private String email;
@@ -110,6 +111,14 @@ public class Driver implements Identified<Integer> {
         this.status = status;
     }
 
+    public String getRepasswordKey() {
+        return repasswordKey;
+    }
+
+    public void setRepasswordKey(String repasswordKey) {
+        this.repasswordKey = repasswordKey;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,6 +127,7 @@ public class Driver implements Identified<Integer> {
         return id == driver.id &&
                 Objects.equals(login, driver.login) &&
                 Objects.equals(password, driver.password) &&
+                Objects.equals(repasswordKey, driver.repasswordKey) &&
                 Objects.equals(firstName, driver.firstName) &&
                 Objects.equals(lastName, driver.lastName) &&
                 Objects.equals(email, driver.email) &&
@@ -130,7 +140,7 @@ public class Driver implements Identified<Integer> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, firstName, lastName, email, phone, location, registrationTime, statusBan, status);
+        return Objects.hash(id, login, password, repasswordKey, firstName, lastName, email, phone, location, registrationTime, statusBan, status);
     }
 
     @Override
@@ -139,6 +149,7 @@ public class Driver implements Identified<Integer> {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", repasswordKey='" + repasswordKey + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

@@ -22,24 +22,23 @@ public class UserDaoImplTest {
     private static final String UPDATE_QUERY = "UPDATE user_account " +
             "SET login = ?, password = ?, first_name = ?, last_name = ?, " +
             "email = ?, phone = ?, registration_date = ?, location = ?, " +
-            "status_ban = ?, role_id = ? " +
+            "status_ban = ?, role_id = ?, repassword_key = ? " +
             "WHERE id = ?";
     private static final String SELECT_QUERY = "SELECT * FROM user_account";
     private static final String CREATE_QUERY = "INSERT INTO user_account " +
-            "(login, password, first_name, last_name, email, phone, registration_date, location, status_ban," +
-            "role_id) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "(login, password, first_name, last_name, email, phone, registration_date, location, status_ban, " +
+            "role_id, repassword_key) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     @Before
     public void init() throws DaoException {
         user = new User();
-        user.setId(1);
         user.setLogin("A");
         user.setPassword("871FF76E24362EFA16E7F39D65EE380ADE9129D969E895CE34E5DB54252604FB");
-        user.setFirstName("Alexandr");
+        user.setFirstName("A");
         user.setLastName("Shaikouski");
         user.setEmail("sash_shay@mail.ruff");
-        user.setPhone("+373256182421");
+        user.setPhone("+373356182421");
         user.setLocation("53.8853376,27.5546112,12");
         user.setRegistrationTime(new Date());
         user.setRole(Role.ADMIN);
