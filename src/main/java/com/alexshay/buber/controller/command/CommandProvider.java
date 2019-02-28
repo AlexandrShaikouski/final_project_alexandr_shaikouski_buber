@@ -21,6 +21,9 @@ public class CommandProvider {
         commandMap.put("delete_user", new CommandDeleteUser());
         commandMap.put("sign_in", new CommandSignInUser());
         commandMap.put("reset_password", new CommandResetPassword());
+        commandMap.put("info_user", new CommandInfoUser());
+        commandMap.put("list_orders", new CommandGetOrderList());
+        commandMap.put("update_user", new CommandUpdateUser());
     }
 
     /**

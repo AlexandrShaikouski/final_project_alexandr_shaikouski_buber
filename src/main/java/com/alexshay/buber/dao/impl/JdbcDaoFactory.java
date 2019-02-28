@@ -8,10 +8,7 @@ import com.alexshay.buber.dao.AutoConnection;
 import com.alexshay.buber.dao.ConnectionPoolFactory;
 import com.alexshay.buber.dao.Identified;
 import com.alexshay.buber.dao.exception.DaoException;
-import com.alexshay.buber.domain.Bonus;
-import com.alexshay.buber.domain.Driver;
-import com.alexshay.buber.domain.TripOrder;
-import com.alexshay.buber.domain.User;
+import com.alexshay.buber.domain.*;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -73,6 +70,7 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
         creators.put(Driver.class, DriverDaoImpl::new);
         creators.put(TripOrder.class, TripOrderDaoImpl::new);
         creators.put(Bonus.class, BonusDaoImpl::new);
+        creators.put(UserBonus.class, UserBonusDaoImpl::new);
     }
 
     public static JdbcDaoFactory getInstance() {

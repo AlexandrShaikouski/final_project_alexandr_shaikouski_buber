@@ -56,6 +56,12 @@
                                 </form>
                             </li>
                             <li class="nav-item">
+                                <form style="margin: 0" action="${pageContext.servletContext.contextPath}/demo">
+                                    <input type="hidden" name="command" value="list_orders">
+                                    <button class="btn btn-link btn-sm" type="submit">List orders</button>
+                                </form>
+                            </li>
+                            <li class="nav-item">
                                 <form style="margin: 0">
                                     <input type="hidden" name="command" vavlue="list_drivers">
                                     <button class="btn btn-link btn-sm" type="button"><a href="${pageContext.servletContext.contextPath}/jsp/admin/create-user.jsp"> Create user</a></button>

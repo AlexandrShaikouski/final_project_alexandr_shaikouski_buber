@@ -37,15 +37,6 @@ public class UserValidatorImpl implements Validator {
                 validString += validString.equals("")?
                         "Login":", login";
             }
-
-            if (driverDao.getByParameter("password", UserService.encryptPassword(password)) != null) {
-                validString += validString.equals("")?
-                        "Password":", password";
-            }else if(userDao.getByParameter("password", UserService.encryptPassword(password)) != null){
-                validString += validString.equals("")?
-                        "Password":", password";
-            }
-
             if (driverDao.getByParameter("email", email) != null) {
                 validString += validString.equals("")?
                         "Email":", email";
@@ -62,8 +53,6 @@ public class UserValidatorImpl implements Validator {
             }
         }catch (DaoException e){
             throw new ServiceException("Failed to get user DAO. ", e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new ServiceException("Failed to use Algorithm for password",e);
         }
 
         return validString.equals("")?null:validString + " already exist!";

@@ -6,13 +6,10 @@ import com.alexshay.buber.dao.FactoryProducer;
 import com.alexshay.buber.dao.GenericDao;
 import com.alexshay.buber.dao.exception.DaoException;
 import com.alexshay.buber.dao.exception.PersistException;
-import com.alexshay.buber.domain.Driver;
-import com.alexshay.buber.domain.DriverStatus;
-import com.alexshay.buber.domain.User;
+import com.alexshay.buber.domain.*;
 import com.alexshay.buber.service.UserService;
 import com.alexshay.buber.service.exception.ServiceException;
-import com.alexshay.buber.validation.Validator;
-import com.alexshay.buber.validation.impl.PasswordValidatorImpl;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
@@ -87,15 +84,19 @@ public class DriverServiceImpl extends UserService<Driver> {
             GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
             String login = request.getParameter("login");
             String password = encryptPassword(request.getParameter("passwordUser"));
-            Driver driver = driverDao.getByParameter("login", login);
+            List<Driver> drivers = driverDao.getByParameter("login", login);
+            Driver driver = null;
+            if(drivers != null){
+                driver = drivers.get(0);
+            }
+
             if (driver != null){
                 if(driver.getPassword().equals(password)){
                     driver.setStatus(DriverStatus.ONLINE);
                     driverDao.update(driver);
-                    return driver;
                 }
             }
-            return null;
+            return driver;
         } catch (DaoException e) {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (PersistException e) {
@@ -111,7 +112,7 @@ public class DriverServiceImpl extends UserService<Driver> {
         DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
         try {
             GenericDao<Driver, Integer> userDao = daoFactory.getDao(Driver.class);
-            Driver driver = userDao.getByParameter("email", email);
+            Driver driver = userDao.getByParameter("email", email).get(0);
             driver.setRepasswordKey(encryptPassword(repassword));
             userDao.update(driver);
 
@@ -131,7 +132,7 @@ public class DriverServiceImpl extends UserService<Driver> {
         String role = request.getParameter("role");
         try {
             GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
-            Driver user = driverDao.getByParameter("email", email);
+            Driver user = driverDao.getByParameter("email", email).get(0);
             if(user.getRepasswordKey().equals(encryptPassword(key))){
                 user.setRepasswordKey(null);
                 driverDao.update(user);
@@ -149,25 +150,96 @@ public class DriverServiceImpl extends UserService<Driver> {
     @Override
     public boolean resetPassword(HttpServletRequest request) throws ServiceException {
         DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
-        Validator validator = new PasswordValidatorImpl();
         String email = request.getParameter("email");
         String password = request.getParameter("passwordUser");
-        String valid = validator.validate(request);
 
         try {
             GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
-            if (valid == "") {
-                Driver driver = driverDao.getByParameter("email",email);
-                driver.setPassword(encryptPassword(password));
-                driverDao.update(driver);
-                return true;
-            }
+            Driver driver = driverDao.getByParameter("email",email).get(0);
+            driver.setPassword(encryptPassword(password));
+            driverDao.update(driver);
+            return true;
         } catch (DaoException | PersistException e) {
             throw new ServiceException("Failed to get user DAO. ", e);
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException("Failed to use Algorithm for password", e);
         }
-        return false;
+    }
+
+    @Override
+    public Driver getByParameter(String parameter, String value) throws ServiceException {
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        try {
+            GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
+            List<Driver> userList = driverDao.getByParameter(parameter, value);
+            Driver driver = null;
+            if (userList != null){
+                driver = userList.get(0);
+            }
+            return driver;
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+        }
+    }
+
+    @Override
+    public void updateUser(HttpServletRequest request) throws ServiceException {
+        DaoFactory daoFactory = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
+        int id = Integer.parseInt(request.getParameter("id"));
+        String login = request.getParameter("login");
+        String location = request.getParameter("location");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String firstName = request.getParameter("name");
+        try {
+            GenericDao<Driver, Integer> driverDao = daoFactory.getDao(Driver.class);
+            Driver driver = driverDao.getByPK(id);
+
+            if (driver != null) {
+                driver.setFirstName(firstName);
+                driver.setEmail(email);
+                driver.setLogin(login);
+                driver.setLocation(location);
+                driver.setPhone(phone);
+                String banTime = request.getParameter("ban_time");
+                if (!banTime.equals("none")) {
+                    driver.setStatusBan(getStatusBan(driver, request));
+                }
+
+                driverDao.update(driver);
+            }
+
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get user DAO. ", e);
+
+        } catch (PersistException e) {
+            throw new ServiceException("Failed to save entity. ", e);
+        }
+
+    }
+
+
+
+
+    public Date getStatusBan(Driver driver, HttpServletRequest request) {
+        Date date = driver.getStatusBan();
+
+        String banTime = request.getParameter("ban_time");
+        int countTimeBan = Integer.parseInt(request.getParameter("count_time_ban"));
+        switch (banTime) {
+            case "hour":
+                return date == null ? DateUtils.addHours(new Date(), countTimeBan) : DateUtils.addMonths(date, countTimeBan);
+            case "day":
+                return date == null ? DateUtils.addHours(new Date(), countTimeBan) : DateUtils.addDays(date, countTimeBan);
+            case "week":
+                return date == null ? DateUtils.addHours(new Date(), countTimeBan) : DateUtils.addWeeks(date, countTimeBan);
+            case "month":
+                return date == null ? DateUtils.addHours(new Date(), countTimeBan) : DateUtils.addMonths(date, countTimeBan);
+            case "year":
+                return date == null ? DateUtils.addHours(new Date(), countTimeBan) : DateUtils.addYears(date, countTimeBan);
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
 }

@@ -96,7 +96,6 @@ public class ResetPassword {
         request.setAttribute("reset", "reset_password");
         request.setAttribute("role", role);
         request.setAttribute("email", email);
-        request.setAttribute("message", "Password exist");
         return responseContent;
     }
 

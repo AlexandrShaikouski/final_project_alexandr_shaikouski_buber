@@ -15,6 +15,7 @@
                                 <th>Login</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Info</th>
                                 <th>Delete driver</th>
                             </tr>
                             </thead>
@@ -26,6 +27,14 @@
                                     <td>${driver.login}</td>
                                     <td>${driver.email}</td>
                                     <td>${driver.phone}</td>
+                                    <td>
+                                        <form method="post" action="${pageContext.servletContext.contextPath}/demo">
+                                            <input name="role" type="hidden" value="driver"/>
+                                            <input type="hidden" name="command" value="info_user">
+                                            <input type="hidden" name="id" value="${driver.id}">
+                                            <button class="btn-link" type="submit">Info</button>
+                                        </form>
+                                    </td>
                                     <td>
                                         <form method="post" action="${pageContext.servletContext.contextPath}/demo">
                                             <input name="role" type="hidden" value="driver"/>

@@ -35,7 +35,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @AutoConnection
     public T getByPK(PK key) throws DaoException {
         String sql = getSelectQuery() + " WHERE id=" + key;
-        return getParameterT(sql);
+        return getParameterT(sql).get(0);
     }
 
     @Override
@@ -100,16 +100,16 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
 
     @Override
     @AutoConnection
-    public T getByParameter(String parameter, String value) throws DaoException {
+    public List<T> getByParameter(String parameter, String value) throws DaoException {
         String sql = getSelectQuery() + " WHERE " + parameter + "=\'" + value +"\'";
         return getParameterT(sql);
     }
 
-    private T getParameterT(String sql) throws DaoException {
+    private List<T> getParameterT(String sql) throws DaoException {
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             ResultSet resultSet = statement.executeQuery();
             List<T> parseRes = parseResultSet(resultSet);
-            return parseRes.isEmpty()?null:parseRes.get(0);
+            return parseRes.isEmpty()?null:parseRes;
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new DaoException("Not getting info by PK from DB", e);

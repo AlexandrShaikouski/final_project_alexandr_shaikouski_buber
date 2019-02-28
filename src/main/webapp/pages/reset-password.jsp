@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Purple Admin</title>
+    <title>Reset password</title>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
@@ -92,24 +92,6 @@
 <script src="${pageContext.servletContext.contextPath}/js/off-canvas.js"></script>
 <script src="${pageContext.servletContext.contextPath}/js/misc.js"></script>
 <script src="${pageContext.servletContext.contextPath}/js/script.js"></script>
-<c:if test="${message != null}">
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" type="button" data-dismiss="modal">x</button>
-                </div>
-                <h3 class="modal-title text-center">Message</h3>
-                <div class="modal-body text-center">${message}</div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <button id="error-gid" style="display: none" type="button" data-toggle="modal" data-target="#myModal"/>
-    <script>$('#error-gid').trigger('click');</script>
-</c:if>
 
 </body>
 </html>

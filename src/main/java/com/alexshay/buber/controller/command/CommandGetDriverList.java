@@ -17,7 +17,6 @@ public class CommandGetDriverList implements Command{
         List<Driver> drivers;
         try {
             drivers = driverService.getAll();
-            request.setAttribute("crud", "list_drivers");
             request.setAttribute("listDrivers", drivers);
             responseContent.setRouter(new Router("/jsp/admin/list-drivers.jsp", Router.Type.FORWARD));
             return responseContent;

@@ -14,6 +14,7 @@
                                 <th>Login</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Info</th>
                                 <th>Delete user</th>
                             </tr>
                             </thead>
@@ -26,8 +27,18 @@
                                     <td>${user.login}</td>
                                     <td>${user.email}</td>
                                     <td>${user.phone}</td>
+
                                     <td>
                                         <form method="post" action="${pageContext.servletContext.contextPath}/demo">
+                                            <input name="role" type="hidden" value="user"/>
+                                            <input type="hidden" name="command" value="info_user">
+                                            <input type="hidden" name="id" value="${user.id}">
+                                            <button class="btn-link" type="submit">Info</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method="post"
+                                              action="${pageContext.servletContext.contextPath}/demo">
                                             <input name="role" type="hidden" value="user"/>
                                             <input name="command" type="hidden" value="delete_user"/>
                                             <input name="id" type="hidden" value="${user.id}"/>
@@ -35,6 +46,7 @@
                                         </form>
                                     </td>
                                 </tr>
+
                             </c:forEach>
 
                             </tbody>

@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -21,6 +22,8 @@ public abstract class UserService<T extends Identified<Integer>> {
     abstract public String getResetPasswordKey(String email) throws ServiceException;
     abstract public boolean checkRepasswordKey(HttpServletRequest request) throws ServiceException;
     abstract public boolean resetPassword(HttpServletRequest request) throws ServiceException;
+    abstract public T getByParameter(String parametr, String value) throws ServiceException;
+    abstract public void updateUser(HttpServletRequest request) throws ServiceException;
 
     public static String encryptPassword(String password) throws NoSuchAlgorithmException {
         byte[] hexHash = MessageDigest.getInstance("SHA-256").digest(password.getBytes(StandardCharsets.UTF_8));
@@ -37,5 +40,6 @@ public abstract class UserService<T extends Identified<Integer>> {
         }
         return key;
     }
+
 
 }

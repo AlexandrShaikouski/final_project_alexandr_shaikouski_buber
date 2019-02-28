@@ -17,7 +17,6 @@ public class CommandGetUserList implements Command{
         List<User> users;
         try {
             users = userService.getAll();
-            request.setAttribute("crud", "list_users");
             request.setAttribute("listUsers", users);
             responseContent.setRouter(new Router("/jsp/admin/list-users.jsp", Router.Type.FORWARD));
         } catch (ServiceException e) {
